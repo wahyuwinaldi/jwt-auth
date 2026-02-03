@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id Int @id @default(autoincrement())
+
+  username String? @unique @db.VarChar(50)
+  name     String? @db.VarChar(100)
+  email    String? @unique @db.VarChar(100)
+  password String? @db.VarChar(255)
+  phone    String? @db.VarChar(50)
+
+  idOrganization Int?    @map("id_organization")
+  roleCode       String? @map("role_code") @db.VarChar(10)
+
+  isDeleted Boolean @default(false) @map("is_deleted")
+
+  deletedBy String?   @map("deleted_by") @db.VarChar(50)
+  deletedAt DateTime? @map("deleted_at")
+
+  createdBy String?  @map("created_by") @db.VarChar(50)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  updatedBy String?  @map("updated_by") @db.VarChar(50)
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  forceChangePassword Boolean @default(false) @map("force_change_password")
+
+  @@map("users")
+}
