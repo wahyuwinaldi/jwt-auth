@@ -16,8 +16,7 @@ model User {
   password String? @db.VarChar(255)
   phone    String? @db.VarChar(50)
 
-  idOrganization Int?    @map("id_organization")
-  roleCode       String? @map("role_code") @db.VarChar(10)
+  idOrganization Int? @map("id_organization")
 
   isDeleted Boolean @default(false) @map("is_deleted")
 
