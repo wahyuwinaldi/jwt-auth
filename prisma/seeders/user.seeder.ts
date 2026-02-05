@@ -1,5 +1,5 @@
 import type { prisma as prismaInstance } from '../../lib/prisma.js'
-import bcrypt from 'bcrypt'
+import * as bcrypt from 'bcrypt'
 
 type PrismaClient = typeof prismaInstance
 
