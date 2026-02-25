@@ -6,12 +6,10 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-    private readonly userService: UserService;
-    private readonly jwtService: JwtService;
-    constructor(userService: UserService, jwtService: JwtService) {
-        this.userService = userService;
-        this.jwtService = jwtService;
-    }
+    constructor(
+        private readonly userService: UserService,
+        private readonly jwtService: JwtService,
+    ) { }
 
     async login(loginDto: LoginDto) {
         const user = await this.userService.findByUsername(loginDto.username ?? '');
@@ -23,13 +21,17 @@ export class AuthService {
             throw new UnauthorizedException('Invalid username or password');
         }
         const { password, ...result } = user;
+
+        const userRole = this.userService.getUserRoles(user.username ?? '')?.role_code;
         return {
             user: result,
+            role: userRole,
             token: {
-                access_token: this.jwtService.sign({ id: user.id }),
+                access_token: this.jwtService.sign({ username: user.username, role: userRole }),
                 expires_in: 3600,
                 token_type: 'Bearer',
             }
         };
     }
+
 }

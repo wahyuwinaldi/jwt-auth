@@ -111,4 +111,52 @@ export class UserService {
       },
     });
   }
+
+  private readonly userRoles = [
+    {
+      id: 1,
+      username: "developer",
+      role_code: "admin",
+      isActive: false,
+    },
+    {
+      id: 2,
+      username: "developer",
+      role_code: "user",
+      isActive: true,
+    },
+  ];
+
+  getUserRoles(username: string) {
+    return this.userRoles.find(role => role.username === username && role.isActive === true) ?? null;
+  }
+
+  private readonly permissions = [
+    {
+      id: 1,
+      menu: "user",
+      role_code: "admin",
+      create: true,
+      update: true,
+      delete: true,
+      view: true,
+      access: true,
+    },
+    {
+      id: 2,
+      menu: "user",
+      role_code: "user",
+      create: false,
+      update: false,
+      delete: false,
+      view: false,
+      access: false,
+    },
+  ];
+
+  getRolePermissions(menu: string, role_code: string, action: string) {
+    const permission = this.permissions.find(permission => permission.menu === menu && permission.role_code === role_code) ?? null;
+    if (!permission) return false;
+    return permission[action];
+  }
 }

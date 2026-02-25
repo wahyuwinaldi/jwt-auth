@@ -4,33 +4,35 @@ import { CreateUserDto } from './dto/create-user.dto.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
 import { DeleteUserDto } from './dto/delete-user.dto.js';
 import { AuthGuard } from '../../../common/guards/auth.guard.js';
+import { PermissionGuard } from '../../../common/guards/permission.guard.js';
 
 @Controller('user')
+@UseGuards(AuthGuard, PermissionGuard)
 export class UserController {
   constructor(private readonly userService: UserService) { }
 
-  @Post()
+  @Post('create')
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
-  @UseGuards(AuthGuard)
-  @Get()
+
+  @Get('list')
   findAll() {
     return this.userService.findAll();
   }
 
-  @Get(':id')
+  @Get('detail/:id')
   findOne(@Param('id') id: string) {
     return this.userService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(+id, updateUserDto);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string, @Body() deleteUserDto: DeleteUserDto) {
     return this.userService.remove(+id, deleteUserDto);
   }
